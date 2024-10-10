@@ -1,4 +1,4 @@
-import { Workshop } from "../models/workshop_model.js";
+import Workshop from "../models/workshop_model.js";
 
 const store = async(req, res) => {
     try{
@@ -32,19 +32,15 @@ const show = async(req, res) => {
     }
 }
 
-const update = (id="", maintenanceId="") => async(req, res) => {
+const update = async(req, res) => {
     try{
-        if(id != ""){
-            const content = await Workshop.findById(id);
-            await Workshop.findByIdAndUpdate(id, {
-                name: content.name,
-                address: content.address,
-                specialties: content.specialties,
-                maintenances: content.maintenances.push(maintenanceId)
-            }).exec();
-            res.json();
-        }
-        const content = await Workshop.findByIdAndUpdate(req.params.id, req.body).exec();
+        const old = await Vehicle.findById(req.params.id);
+        const content = await Workshop.findByIdAndUpdate(req.params.id, {
+            name: req.body.name,
+            address: req.body.address,
+            specialties: req.body.specialties,
+            maintenances: old.maintenances
+        }).exec();
         res.status(201).json(content);
     } catch(error){
         res.status(400).send(error.message);

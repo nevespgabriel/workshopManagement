@@ -1,4 +1,4 @@
-import { Vehicle } from "../models/vehicle_model.js";
+import Vehicle from "../models/vehicle_model.js";
 
 const store = async(req, res) => {
     try{
@@ -33,20 +33,16 @@ const show = async(req, res) => {
     }
 }
 
-const update = (id="", maintenanceId="") => async(req, res) => {
+const update = async(req, res) => {
     try{
-        if(id != ""){
-            const content = Vehicle.findById(id);
-            Vehicle.findByIdAndUpdate(id, {
-                plate: content.plate,
-                model: content.model,
-                year: content.year,
-                owner: content.owner,
-                maintenances: content.maintenances.push(maintenanceId)
-            }).exec();
-            res.json();
-        }
-        const content = await Vehicle.findByIdAndUpdate(req.params.id, req.body).exec();
+        const old = await Vehicle.findById(req.params.id);
+        const content = await Vehicle.findByIdAndUpdate(req.params.id, {
+            plate: req.body.plate,
+            model: req.body.model,
+            year: req.body.year,
+            owner: req.body.owner,
+            maintenances: old.maintenances
+        }).exec();
         res.status(201).json(content);
     } catch(error){
         res.status(400).send(error.message);

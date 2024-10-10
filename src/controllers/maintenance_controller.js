@@ -1,4 +1,4 @@
-import { Maintenance } from "../models/maintenance_model.js";
+import Maintenance from "../models/maintenance_model.js";
 import vehicle_controller from "./vehicle_controller.js";
 import workshop_controller from "./workshop_controller.js";
 
@@ -15,8 +15,6 @@ const store = async(req, res) => {
             date: req.body.date,
             totalCost: cost
         });
-        vehicle_controller.update(req.body.vehicle, content._id);
-        workshop_controller.update(req.body.workshop, content._id);
         res.status(201).json(content);
     } catch(error){
         res.status(400).send(error.message);
@@ -43,7 +41,17 @@ const show = async(req, res) => {
 
 const update = async(req, res) => {
     try{
-        const content = await Maintenance.findByIdAndUpdate(req.params.id, req.body).exec();
+        let cost = 0;
+        req.body.services.forEach((service) => {
+            cost+=service.price;
+        });
+        const content = await Maintenance.findByIdAndUpdate(req.params.id, {
+            workshop: req.body.workshop,
+            vehicle: req.body.vehicle,
+            services: req.body.services,
+            date: req.body.date,
+            totalCost: cost
+        }).exec();
         res.status(201).json(content);
     } catch(error){
         res.status(400).send(error.message);

@@ -1,10 +1,11 @@
 import { Schema, model } from "mongoose";
-import Maintenance from "./maintenance_model";
 
 const vehicleSchema = new Schema({
     plate:{
         type: Schema.Types.String,
         required: true,
+        minLength: 7,
+        maxLength: 7,
         unique: true
     },
     model: {

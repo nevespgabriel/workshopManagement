@@ -11,7 +11,7 @@ const workshopSchema = new Schema({
     },
     specialties:{
         type: [Schema.Types.String],
-        required: true
+        required: true,
     },
     maintenances:{
         type: [Schema.Types.ObjectId],
