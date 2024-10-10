@@ -32,8 +32,18 @@ const show = async(req, res) => {
     }
 }
 
-const update = async(req, res) => {
+const update = (id="", maintenanceId="") => async(req, res) => {
     try{
+        if(id != ""){
+            const content = await Workshop.findById(id);
+            await Workshop.findByIdAndUpdate(id, {
+                name: content.name,
+                address: content.address,
+                specialties: content.specialties,
+                maintenances: content.maintenances.push(maintenanceId)
+            }).exec();
+            res.json();
+        }
         const content = await Workshop.findByIdAndUpdate(req.params.id, req.body).exec();
         res.status(201).json(content);
     } catch(error){

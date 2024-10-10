@@ -33,8 +33,19 @@ const show = async(req, res) => {
     }
 }
 
-const update = async(req, res) => {
+const update = (id="", maintenanceId="") => async(req, res) => {
     try{
+        if(id != ""){
+            const content = Vehicle.findById(id);
+            Vehicle.findByIdAndUpdate(id, {
+                plate: content.plate,
+                model: content.model,
+                year: content.year,
+                owner: content.owner,
+                maintenances: content.maintenances.push(maintenanceId)
+            }).exec();
+            res.json();
+        }
         const content = await Vehicle.findByIdAndUpdate(req.params.id, req.body).exec();
         res.status(201).json(content);
     } catch(error){

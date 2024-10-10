@@ -15,6 +15,8 @@ const store = async(req, res) => {
             date: req.body.date,
             totalCost: cost
         });
+        vehicle_controller.update(req.body.vehicle, content._id);
+        workshop_controller.update(req.body.workshop, content._id);
         res.status(201).json(content);
     } catch(error){
         res.status(400).send(error.message);
