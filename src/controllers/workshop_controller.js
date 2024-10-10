@@ -50,6 +50,7 @@ const update = async(req, res) => {
 const destroy = async(req, res) => {
     try{
         await Workshop.findByIdAndDelete(req.params.id).exec();
+        res.status(200).json();
     } catch(error){
         res.status(400).send(error.message);
     }
